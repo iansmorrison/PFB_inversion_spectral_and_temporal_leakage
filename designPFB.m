@@ -24,30 +24,32 @@ function designPFB(Nchan,Num,Den,Ntaps,ffft_len,quantise,display)
     H_Obj_0 = design(Hf,'firls','Wstop',15,'systemobject',true);
     h = H_Obj_0.Numerator;
     
-    % optionally quantise to "quantise" bits.  Assumes max h coefficient ~0.17.
+    hmax = max(abs(h))*1.05;
+    
+    % optionally quantise to "quantise" bits.
     if (quantise == 8)
-        h = int8(h.*(747.0/1.0));
-        h = double(h).*(0.00133868808568*1.0);
+        h = int8(h.*(128.0/hmax));
+        h = double(h).*(hmax/128.0);
     end
     if (quantise == 12)
-        h = int16(h.*(12047.0/1.0));
-        h = double(h).*(0.00008300821781*1.0);
+        h = int16(h.*(2048.0/hmax));
+        h = double(h).*(hmax/2048.0);
     end
     if (quantise == 13)
-        h = int16(h.*(24094.0/1.0));
-        h = double(h).*(0.00004150410891*1.0);
+        h = int16(h.*(4096.0/hmax));
+        h = double(h).*(hmax/4096.0);
     end
     if (quantise == 14)
-        h = int16(h.*(48188.0/1.0));
-        h = double(h).*(0.00002075205445*1.0);
+        h = int16(h.*(8192.0/hmax));
+        h = double(h).*(hmax/8192.0);
     end
     if (quantise == 15)
-        h = int16(h.*(96376.0/1.0));
-        h = double(h).*(0.00001037602723*1.0);
+        h = int16(h.*(16384.0/hmax));
+        h = double(h).*(hmax/16384.0);
     end
     if (quantise == 16)
-        h = int16(h.*(192752.0/1.0));
-        h = double(h).*(0.00000518801361*1.0);
+        h = int16(h.*(32768.0/hmax));
+        h = double(h).*(hmax/32768.0);
     end
 
     % Save impulse response h, and other parameters

@@ -173,7 +173,7 @@ for impulseOffset = 1 : PFBarms
     FFFF = [FFFF; FN(1:FN_width/2,1)]; % lower half of chan 1 is last part of FFFF
 
     len = length(FFFF);
-    save('N_channels','FFFF');
+    %save('N_channels','FFFF');
 
     % back transform
     z1 = ifft(fftshift(FFFF))./(OS_Nu/OS_De);  % re-scale by OS factor
@@ -188,6 +188,10 @@ for impulseOffset = 1 : PFBarms
 %     figure;
 %     subplot(211); plot((1:len),real(z1(1:len))); box on; grid on; title('z1 Real'); 
 %     subplot(212); plot((1:len),imag(z1(1:len))); box on; grid on; title('z1 Imag'); xlabel('time');
+
+%     figure;
+%     plot((1:len),20.0*log10(abs(z1(1:len))+0.00000000000001)); box on; grid on; title('Output Power By Sample'); xlabel('sample'); ylabel('Power (dB)');
+%     pause
 
     output_offset =  (OS_De*N/OS_Nu)*(fftLength-inputOffset) - (Ntaps-1)/2;
 

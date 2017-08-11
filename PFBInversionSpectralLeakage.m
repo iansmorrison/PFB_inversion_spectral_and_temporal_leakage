@@ -12,7 +12,7 @@ updateFilterDesign = 1;   % 1 to update filter design, 0 otherwise
 displayFilterDesign = 1;  % 1 to display filter design plot, 0 otherwise
 
 % Length of forward FFT to process fine channels
-fftLength = 2^6;
+fftLength = 2^8;
 
 % Length of test vector block
 blockLength = fftLength*N*OS_De/OS_Nu;
@@ -53,8 +53,8 @@ for freqBinOffset = 1 : blockLength
     % GENERATE TEST VECTOR (input to PFB)
     % amplitude 1.0
     disp('generating test vector');
-    %phase = rand*2.0*pi;  % randomise the phase of each sinusoid so the later summation of spectra is representative of white noise
-    phase = 0.0;          % same phase for all sinusoids -> equivalent to impulse input
+    phase = rand*2.0*pi;  % randomise the phase of each sinusoid so the later summation of spectra is representative of white noise
+    %phase = 0.0;          % same phase for all sinusoids -> equivalent to impulse input
     blockSig = complexSinusoidSingleBin(blockLength,freqBinOffset,phase);
     
 	% generate double block length: will use middle half, after PFB primed
@@ -171,7 +171,7 @@ for freqBinOffset = 1 : blockLength
 
     len = length(FFFF);
     save('N_channels','FFFF');
-    
+     
   	% back transform
     z1 = ifft(fftshift(FFFF))./(OS_Nu/OS_De);  % re-scale by OS factor
 
@@ -182,6 +182,10 @@ for freqBinOffset = 1 : blockLength
         figure;
         subplot(211); plot((1:len),real(z1(1:len))); box on; grid on; title('z1 Real'); 
         subplot(212); plot((1:len),imag(z1(1:len))); box on; grid on; title('z1 Imag'); xlabel('time');
+        
+        figure;
+        plot((1:len),20.0*log10(abs(FFFF(1:len))+0.00000000000001)); box on; grid on; title('Output Power By Frequency'); xlabel('Frequency Bin'); ylabel('Power (dB)');
+        
         fprintf('\nPress any key for next frequency...\n');
         pause;
     end;
